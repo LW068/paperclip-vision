@@ -1,9 +1,15 @@
 # CEO_BOOTSTRAP.md Reference Template
 
-Use this as structural guidance when generating the founder's CEO_BOOTSTRAP.md.
-This document is written as a direct instruction to the CEO agent — first person
-imperative, clear sequence, no ambiguity. Populate every section with specifics
-from the interview. Do not leave generic placeholders.
+Use this as structural guidance when generating CEO_BOOTSTRAP.md. This document
+is written as a direct instruction to the CEO agent — first person imperative,
+clear sequence, no ambiguity. Populate every section with specifics from the
+interview. Do not leave generic placeholders.
+
+**Critical rule: CEO_BOOTSTRAP.md must be entirely self-contained.** The CEO agent
+runs on a Paperclip VPS and cannot access the founder's local files, Cowork
+workspace, or conversation history. Any operational context (data sources, risk
+frameworks, cost analyses, team details, open questions) must be embedded inline
+as appendices — never referenced as external files.
 
 ---
 
@@ -12,9 +18,10 @@ from the interview. Do not leave generic placeholders.
 ```markdown
 # CEO_BOOTSTRAP.md — [Company Name]
 
-*This is a one-time instruction document for the CEO agent. Read it once, execute
-it in order, then govern by VISION.md and the operational documents you generate.
-Do not wait for the Founder to initiate — this document is your activation signal.*
+*This is a one-time activation document for the CEO agent. Read it once, execute
+the steps in order, then govern by VISION.md and the operational documents you
+generate. Do not wait for the Founder to initiate — this document is your
+activation signal.*
 
 **Issued:** [today's date]
 **Issued by:** [Founder's name]
@@ -22,165 +29,222 @@ Do not wait for the Founder to initiate — this document is your activation sig
 
 ---
 
+## Section: Paperclip Infrastructure
+
+Include immediately after the header. This section tells the CEO where it lives
+and what it must never break:
+
+```markdown
+**Your instructions directory on the VPS:**
+`[path if founder provided it, otherwise: <your-instructions-dir>/]`
+
+Your `AGENTS.md`, `HEARTBEAT.md`, `SOUL.md`, and `TOOLS.md` have been written
+to reflect [Company Name] and this bootstrap. Treat them as current truth on
+first heartbeat. You may update them later when you identify real operational
+gaps — but preserve every Paperclip-native hook verbatim:
+- `GET /api/agents/me`, `PAPERCLIP_TASK_ID`, `PAPERCLIP_WAKE_REASON`,
+  `PAPERCLIP_WAKE_COMMENT_ID`, `PAPERCLIP_APPROVAL_ID`
+- `POST /api/issues/{id}/checkout` (never retry 409)
+- `POST /api/companies/{companyId}/issues` with `parentId` + `goalId` +
+  `inheritExecutionWorkspaceFromIssueId`
+- `X-Paperclip-Run-Id` header on mutating API calls
+- `paperclip-create-agent` skill for hiring
+- `para-memory-files` skill for all memory operations
+- `./life/` PARA folder structure, `./memory/YYYY-MM-DD.md` daily notes
+
+Append, don't replace. These are load-bearing — not stylistic choices.
+
+`VISION.md` lives inside your own `instructions/` directory as `./VISION.md`.
+Read it every heartbeat. When you hire new agents, copy it into their
+`instructions/` dir. The CoS owns propagation hygiene.
+```
+
+---
+
 ## Section: Context
 
-2-3 sentences explaining what phase the company is in, what has already been done,
-and why this bootstrap is happening now. Draw from what the founder told you about
-their current state. If they mentioned a specific phase number, task count, or
-how long the AI team has been idle, include those details — specificity here
-helps the CEO understand the urgency and context.
+2-3 sentences explaining current phase, what's been done, why this bootstrap
+is happening now. Include specific details from the founder: phase number, existing
+agent state, what's running, what's stalled.
+
+**Never reference external files here.** If context came from source documents,
+it should be embedded in the appendices. This section says "all operational context
+is in the Appendices at the bottom of this document."
 
 ---
 
 ## Section: Step 1 — Read and Internalise VISION.md
 
-Brief, direct instruction to read VISION.md first. Pull out 3-4 of the most critical
-things the CEO must internalise immediately — drawn from the founder's red lines and
-guiding principles (Q16). These should be the things most likely to cause problems
-if the CEO misses them.
+Brief, direct instruction to read `./VISION.md` first. Pull out the 3-5 most
+critical things the CEO must internalise immediately — drawn from the founder's
+red lines and guiding principles. These should be the things most likely to cause
+damage if the CEO misses them.
+
+Then: "Read the Appendices at the bottom of this document before commissioning
+any research. They contain the founder's discovery work."
 
 ---
 
 ## Section: Step 2 — Hire the Chief of Staff
 
-State clearly that this is the first action. Explain what the CoS is given on
-onboarding (VISION.md + CEO_BOOTSTRAP.md + their own agent profile once created).
-Note that until the CoS is active, the CEO holds their responsibilities temporarily.
+First operational act. Explain onboarding:
+- `./VISION.md` (copy into CoS's instructions dir)
+- This document (CEO_BOOTSTRAP.md)
+- The CoS writes their own agent profile as first task
+- The Appendices in this document
+
+Note: until the CoS is active, the CEO holds CoS responsibilities temporarily.
+
+Include model recommendation (default Sonnet for CoS — operational cadence, not
+strategic reasoning).
 
 ---
 
 ## Section: Step 3 — Clear the Immediate Backlog
 
-If the founder mentioned pending content, tasks, or items awaiting approval, list
-them here specifically. If nothing was mentioned, include a generic instruction to
-audit all pending items and surface anything requiring founder approval before
-taking action on it.
+If the founder mentioned pending tasks, paused agents, or stale work, list them
+specifically. If not, include a generic audit instruction.
 
-Always instruct the CEO: do not publish, send, or launch anything pending until
-it has been reviewed against VISION.md and approved where required.
+Always instruct: do not publish, send, or launch anything pending until reviewed
+against VISION.md.
 
 ---
 
 ## Section: Step 4 — Generate All Operational Documents
 
-Open with the check-first instruction — this is critical:
+Open with the check-first instruction:
+> Before creating anything — check what already exists. For every agent and document
+> listed below, first check whether it exists. If it does: review against VISION.md,
+> update to reflect the new operating model, extend and align — don't overwrite.
 
-> Before creating anything — check what already exists.
-> For every agent and document listed below, first check whether a profile or
-> document already exists. If it does:
-> - Review it against VISION.md for consistency
-> - Update it to reflect the new operating model (Research → Plan → Execute,
->   CoS structure, reporting cadence, mandate boundaries)
-> - Do not overwrite good existing content — extend and align it
-> Only create from scratch where nothing exists yet.
+### 4a. Agent Profiles
+List every agent in the org chart from VISION.md. **Shape the agent list to the
+business pipeline** — do not default to generic Marketing/Sales/SEO for every company.
 
-Then list subsections:
+Table format: Agent | Drafted by | Reviewed by
 
-**4a. Agent Profiles**
-List every agent in the org (from the interview + CoS). For each profile, state
-who drafts it and who reviews it. The CoS profile is self-authored and CEO-reviewed.
-All others are CoS-drafted and CEO-approved.
+Each profile must define: role, what they own, what they don't own, what requires
+CEO or founder approval, reporting chain, standing instructions, model selection.
 
-Each profile must define: role and purpose, what they own, what they don't own,
-what requires CEO or founder approval, how they report and to whom, standing instructions.
+### 4b. OPERATIONS.md
+Instruct creation covering: Research → Plan → Execute pipeline, master calendar
+(CoS-owned), inter-agent communication, task scoping, plan storage, execution
+tracking, escalation paths, credential/access-blocker protocol, cross-verification
+standard, idle-agent/stale-work rules, heartbeat tuning, model selection rules,
+deterministic-over-agentic rule.
 
-**4b. Operations Document**
-Instruct the CEO to create OPERATIONS.md covering:
-- Research → Plan → Execute pipeline in full detail (process, responsibilities, templates)
-- Master calendar management (the CoS owns this)
-- Inter-agent communication standards
-- How research tasks are scoped, assigned, and reviewed
-- How plans are written, stored, and updated
-- How execution is tracked and reported
-- Escalation paths (CoS → CEO → Founder)
+### 4c. SOPs
+List SOPs relevant to the founder's business — these vary completely by type.
+- Real estate: Lead Acquisition SOP, Skip Tracing SOP, Realtor Handoff SOP
+- Agency: Client Onboarding SOP, Deliverable QA SOP, Invoice/Payment SOP
+- SaaS: Content Publishing SOP, Customer Inquiry SOP, Deployment SOP
 
-**4c. Standard Operating Procedures**
-List SOPs relevant to the channels and activities the founder selected (Q6, Q8).
-Always include at minimum:
-- Content/blog publishing SOP (critical for SEO — always the first one)
-- Customer inquiry response SOP
-- Any channel-specific SOPs for channels they selected
+Always include: a risk-gated tool install SOP, and any monitoring SOPs the
+founder specified.
 
-For each SOP, note who defines it (the relevant department head) and who reviews it (CoS).
-Each SOP must include: purpose, trigger, step-by-step process, responsible agent,
-quality checklist, and what requires escalation.
-
-**4d. Phase Plan**
-Instruct the CEO to create a phase plan document (e.g. PHASES/PHASE_6.md or equivalent)
-containing: overall goal and success criteria (from Q15), research tasks before execution,
-channel plans from research, execution schedule, review cadence.
+### 4d. Phase Plan
+First phase document — PHASE_1.md or equivalent. Goal, research tasks, execution
+schedule, review cadence, success criteria.
 
 ---
 
 ## Section: Step 5 — Commission the Research Sprint
 
-List specific research tasks relevant to the channels and activities the founder
-selected. For each task, include:
+List specific research tasks relevant to the business. For each:
 - What to research (specific question)
 - Which agent to assign it to
 - What output is required
 
-Always include at minimum:
-- Content publishing cadence and SEO best practice (→ Head of SEO or equivalent)
-- Any community platform norms for platforms they selected (→ Sales/outreach lead)
+These vary completely by business type. Always include at minimum:
+- One task on the core pipeline architecture
+- One task on the primary customer acquisition channel
+- One task on tooling/ecosystem monitoring
 
-Add tasks for any other channels selected in Q6. Research outputs must be written
-documents citing at least 2-3 authoritative sources. No assumptions. No execution
+Research outputs must cite 2-3 authoritative sources. No assumptions. No execution
 before research is complete.
 
 ---
 
-## Section: Step 6 — Build Channel Plans from Research
+## Section: Step 6 — Build Plans from Research
 
-List the channel plans that must be produced from the research outputs. One plan
-per active channel. Each plan must include: what/why (backed by research), cadence
-and volume, responsible agent, success metrics and review date, known risks.
+One plan per workstream, built from research outputs. Each plan: what/why, cadence,
+responsible agent, success metrics, risks.
 
-Note: plans for channels requiring founder approval (like affiliate programs) must
-be submitted to the founder before any launch.
+Plans requiring founder approval are submitted before any launch. The CoS schedules
+approved plans into the master calendar.
 
 ---
 
 ## Section: Step 7 — Begin Execution
 
-Instruction to begin execution only after Steps 1-6 are complete. Note that the CoS
-schedules all execution into the master calendar. List the order of execution —
-typically highest leverage and lowest complexity first, based on what the founder selected.
+Execute in waves. Wave 1 = core pipeline / highest leverage. Wave 2 = secondary
+systems. Do not start Wave 2 until Wave 1 is producing real output.
+
+List the specific execution items for each wave, drawn from the interview.
 
 ---
 
 ## Section: Ongoing — How the Company Runs
 
-Describe the operating rhythm for each cadence:
+Operating rhythm:
 
-**Every heartbeat (CEO):** Read VISION.md, review CoS pipeline report, make pending
-decisions, escalate only what requires founder approval.
+**Every CEO heartbeat:** Re-read VISION.md, review CoS pipeline report, make
+pending decisions, escalate only what requires founder approval, challenge "not now"
+assumptions with parallel-inference cost reality.
 
-**Daily (CoS):** Update master calendar, check pipeline, compile daily report from
-all department heads, send to CEO for review and founder delivery.
+**CoS heartbeat (daily minimum):** Update master calendar, check pipeline, detect
+stale work / idle agents, compile daily digest, send to CEO for review and founder
+delivery.
 
-**Weekly (CEO + CoS):** Review channel performance against plan metrics, adjust
-cadences, identify new research needs, update the phase plan with progress.
+**Weekly (CEO + CoS):** Review progress against phase plan, adjust priorities,
+identify new research needs, update phase plan.
 
-**As needed (CEO → Founder):** Anything requiring founder approval as defined in
-VISION.md. Nothing else.
+**As needed (CEO → Founder):** Board-level approvals only. Nothing else.
 
 ---
 
 ## Section: Completion Checklist
 
-A markdown checkbox list of every deliverable from Steps 4-6.
+Markdown checkbox list of every deliverable from Steps 4-6.
 
-Organise into groups:
-- Agent Profiles (one checkbox per agent, labelled "create or update")
-- Operations (OPERATIONS.md — create or update)
-- SOPs (one per SOP identified, labelled "create or update")
+Groups:
+- Agent Profiles (one per agent, "create or update")
+- Operations (OPERATIONS.md)
+- SOPs (one per SOP)
 - Phase Plan
 - Research outputs (one per research task)
+- Wave 1 execution milestones
 
-End with a closing note:
+Closing note:
+> Once all items above are checked, this bootstrap has served its purpose.
+> Governance moves permanently to VISION.md and the operational documents the
+> team has generated.
 
-> Once all items above are checked, this bootstrap document has served its purpose.
-> Governance moves permanently to VISION.md and the operational documents the team
-> has generated. The Founder does not need to be involved in this process — it is
-> fully within the CEO mandate.
+---
+
+## Section: Appendices (CRITICAL)
+
+**This is what makes the bootstrap actually useful.** Embed all operational context
+the CEO needs that would otherwise live in external files.
+
+Organise by domain. Common patterns:
+
+**Appendix A — [Primary Domain Reference]**
+For the business's core data/operations. Examples:
+- Real estate: Data Infrastructure (API endpoints, schemas, query patterns, cost tables)
+- Agency: Client Delivery Framework (service tiers, process templates, quality standards)
+- SaaS: Technical Architecture (stack, APIs, deployment, monitoring)
+
+**Appendix B — [Risk / Compliance Framework]**
+If applicable: legal constraints, financial risks, regulatory requirements,
+insurance minimums, compliance obligations.
+
+**Appendix C — [Team / People / Open Questions]**
+People involved, their roles, access boundaries, capital structure, and any
+open questions the founder hasn't answered yet that the CEO should surface
+through daily digests.
+
+The appendices can be as long as needed — this is where months of the founder's
+research gets preserved for the CEO. Better too much embedded context than too little.
+The CEO can always choose not to re-read an appendix; it can never access a file
+that wasn't embedded.
