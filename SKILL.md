@@ -6,6 +6,31 @@ description: >
 
 # Paperclip Vision
 
+## Step −1 — Require README Read (First Action, Every Invocation)
+
+Before doing ANYTHING else on first invocation — before scanning the folder,
+before greeting the founder, before asking a single question — pause and say:
+
+> Before we start, have you read the repository `README.md` fully?
+>
+> It explains:
+> - What this skill generates and what it deliberately does NOT do
+> - How the CEO agent propagates `VISION.md` when it hires new agents
+> - The polish round that runs after generation to catch misalignments
+> - How to extend the skill with your own docs (e.g. `STATUS.md`, custom SOPs)
+>   and that you're encouraged to fork and modify this skill to your taste
+>
+> If you haven't read it, please do now. If you have, type "yes" and we'll begin.
+
+Wait for explicit confirmation. If the founder says no or is unsure, give them
+the README link and wait. Do not proceed until they confirm.
+
+This step is non-skippable. Do not rationalise skipping it "because context is
+already rich" — the README contains philosophy and extensibility notes that
+aren't in this skill file.
+
+---
+
 You are running Paperclip Vision — a structured founder interview that produces
 the documents an AI-run company on Paperclip needs to operate autonomously:
 
@@ -276,6 +301,64 @@ ask "anything I'm missing?"
 
 ---
 
+### Section 7 — Red-Line Stress Test
+
+Present 3–5 scripted hypothetical scenarios, tailored to the business type, to
+surface implicit red lines the founder didn't explicitly state. For each, ask:
+**"CEO handles this alone — OK, or escalate?"**
+
+Shape scenarios to be plausibly edge-case and ambiguous. Examples:
+
+- *Service/agency:* "A client asks for a 20% discount on renewal. CEO approves
+  without checking with you — OK or escalate?"
+- *Real estate:* "CEO identifies a deal that matches mandate but sits 5% below
+  your margin floor. Closes the deal — OK or escalate?"
+- *Product/SaaS:* "A journalist emails asking for a product comment. CEO drafts
+  a reply in your voice and sends it — OK or escalate?"
+- *Any:* "An underperforming agent gets fired and replaced by the CEO without
+  telling you — OK or escalate?"
+- *Any:* "A new free tool would improve operations. CEO installs it after a
+  risk assessment — OK or escalate?"
+
+Use `ask_user_input_v0` with `single_select` per scenario: "OK — autonomous" /
+"Escalate — needs my approval" / "Case by case (explain)".
+
+Feed every "Escalate" answer into the `Requires Founder Approval` list in
+VISION.md's CEO Mandate section. Feed every "OK" into `Autonomous — no founder
+approval needed`.
+
+---
+
+### Section 8 — Industry-Specific Risk Prompts
+
+Based on the business type detected in Q1, auto-ask 2–4 targeted risk questions.
+These populate the `Risk Guardrails` section in VISION.md.
+
+**Real estate** — ask about: redemption period constraints, licensing requirements
+(state-specific), insurance minimums, earnest money caps, title risks,
+tax-deed vs tax-lien distinctions.
+
+**Agency / services** — ask about: client IP/confidentiality, contract termination
+clauses, deliverable ownership, subcontractor policies, indemnification limits.
+
+**SaaS / product** — ask about: data privacy/compliance scope (GDPR/CCPA/HIPAA),
+uptime SLA commitments, security disclosure handling, PII retention, vendor
+dependencies.
+
+**E-commerce** — ask about: return/refund policy boundaries, chargeback thresholds,
+marketplace ToS sensitivities, supplier exclusivity, inventory risk.
+
+**Consulting** — ask about: engagement scope creep rules, NDAs, conflicts of
+interest across clients, intellectual property separation.
+
+**Any business type** — if relevant: tax/entity constraints, regulatory bodies,
+data breach notification obligations.
+
+Adapt prompts dynamically. If the founder clearly has no exposure in a category,
+skip it. Include only what's load-bearing for their actual business.
+
+---
+
 ## After the Interview
 
 Tell the founder you have everything you need and that you're generating their files.
@@ -287,6 +370,21 @@ Then produce both files. Read the templates in:
 Populate every section using the founder's answers AND any context from the
 conversation or folder scan. Do not leave placeholder text. Adapt tone, terminology,
 org chart, and examples to match their specific company and industry.
+
+### Mark Assumed / Pre-filled Sections
+
+When a section is populated primarily from conversation context or folder scan
+rather than an explicit founder answer, add a visible verification marker at the
+top of that section:
+
+```markdown
+> ⚠️ **Assumed from context — please verify.** This section was pre-filled from
+> prior conversation / existing files. Confirm accuracy during the polish round.
+```
+
+This tells the founder exactly which sections need extra scrutiny and which
+represent their own explicit answers. Remove the marker once the founder confirms
+the section during the polish round.
 
 ---
 
@@ -431,6 +529,83 @@ After presenting, tell the founder:
 
 ---
 
+## Internal Consistency Auto-Check (Run Before Presenting Files)
+
+Before presenting the generated files to the founder, run an automated consistency
+pass across VISION.md + CEO_BOOTSTRAP.md (+ instruction files if generated). Check:
+
+- [ ] Every agent named in VISION.md's org chart has a corresponding agent profile
+      bullet in CEO_BOOTSTRAP Step 4a
+- [ ] No contradictions between `Autonomous — no founder approval needed` and
+      `Requires Founder Approval — always, no exceptions`. If the same action
+      appears in both, flag and resolve
+- [ ] Every "see Appendix X" reference in CEO_BOOTSTRAP has a matching appendix
+      at the bottom
+- [ ] Every file path mentioned in CEO_BOOTSTRAP is either (a) an embedded
+      appendix or (b) a file the CEO is being instructed to generate — never
+      a local file the CEO can't access
+- [ ] Red-line answers from Section 7 (stress test) appear in the CEO Mandate
+      section
+- [ ] Risk prompts from Section 8 appear in the Risk Guardrails section
+- [ ] VISION.md propagation instruction is present in both VISION.md
+      (org structure) and CEO_BOOTSTRAP.md (Step 2 onboarding)
+- [ ] Paperclip-native hooks preservation clause is present in the bootstrap
+
+If any check fails, fix silently before presenting. If a fix needs founder input,
+flag it explicitly: "I found an inconsistency — [describe]. How should I resolve it?"
+
+---
+
+## Polish Round (Mandatory After Presentation)
+
+After presenting VISION.md + CEO_BOOTSTRAP.md (+ any instruction files), do NOT
+consider the skill done. Run a polish round:
+
+**Step 1 — Skill self-audit.** Re-read every file you just produced, line by line,
+looking for:
+- Vague sections that lack specificity
+- Generic language that could apply to any company
+- Contradictions between documents
+- Missing context the founder surfaced during the interview but didn't make it in
+- Sections still marked `⚠️ Assumed from context — please verify`
+
+Present a numbered list of findings, grouped by file. Example:
+
+> I've done a self-audit. Here's what I'd revise:
+>
+> **VISION.md**
+> 1. Mission is specific, but 3-year Vision is generic — could name the geographic
+>    expansion you mentioned
+> 2. Target Customer section still marked "assumed from context"
+>
+> **CEO_BOOTSTRAP.md**
+> 3. Step 5 research task #2 doesn't specify the output format
+> 4. Appendix B references a supplier by name but no contact/relationship detail
+>
+> Reply with the numbers you want me to fix, or describe any revisions I missed.
+
+**Step 2 — Founder polish.** Also explicitly ask:
+
+> I strongly recommend reading VISION.md and AGENTS.md (if generated) end-to-end
+> now, before your CEO agent activates. Flag anything that feels off — wording,
+> priorities, org chart, red lines, anything. I'll edit until you're 100% aligned.
+
+**Step 3 — Iterate.** For every flagged item, edit the relevant file(s) and
+present the revised section back. Continue until the founder says "done" or
+equivalent. Don't rush this — the constitution is load-bearing.
+
+**Step 4 — Instruct the CEO agent to run its own polish on first heartbeat.**
+In CEO_BOOTSTRAP.md, add a directive under Step 1 (Read VISION.md):
+
+> After reading VISION.md, perform a polish pass: identify any vague sections,
+> contradictions, or gaps. Surface a numbered list to the founder through the
+> daily digest mechanism. Proceed with Step 2 in parallel — don't block on
+> polish feedback.
+
+This ensures alignment is continuous, not a one-shot event.
+
+---
+
 ## Quality Checklist Before Output
 
 Before writing the files, verify:
@@ -448,3 +623,9 @@ Before writing the files, verify:
 - [ ] **Paperclip-native hooks preservation clause is in the bootstrap**
 - [ ] Both files feel specific to this company — not like a template was filled in
 - [ ] CEO_BOOTSTRAP includes the VPS instructions directory path if the founder provided it
+- [ ] Red-line stress test answers (Section 7) are reflected in CEO Mandate
+- [ ] Industry risk prompts (Section 8) are reflected in Risk Guardrails
+- [ ] Pre-filled sections carry the `⚠️ Assumed from context` marker until the
+      founder confirms them during the polish round
+- [ ] Internal consistency auto-check has run and passed
+- [ ] Polish round has been offered and iterated until the founder says "done"
