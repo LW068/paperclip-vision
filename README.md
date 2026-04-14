@@ -148,6 +148,17 @@ The skill will prompt you to confirm you've read this README. Type `yes` and it'
 
 ---
 
+## Tips to Run This Smoothly
+
+A few Paperclip settings worth checking once your CEO is activated. These aren't hard requirements — the skill works without them — but they make the difference between a CEO that actually operates autonomously and one that's constantly pinging you.
+
+- **Turn off "Require board approval for new hires."** Under your Paperclip company settings → `Hiring` section → toggle it off. Once VISION.md is aligned and the CEO has a clear org-chart mandate, requiring founder sign-off on every hire defeats the whole point of delegation. The CEO is aligned now — trust it to hire within the mandate. (If a red line is crossed, the CEO escalates per VISION.md anyway.)
+- **Let the CEO set its own heartbeat cadence.** Don't micromanage the rhythm. The bootstrap gives the CEO a sensible default; if the business needs a different cadence, the CEO will propose it through the daily digest.
+
+Revisit these as the company matures. Early on you may want more oversight; once you trust the CEO's judgement, loosen the reins.
+
+---
+
 ## What's New In This Fork
 
 This fork extends the original `aronprins/paperclip-vision` with:
