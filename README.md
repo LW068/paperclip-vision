@@ -2,9 +2,11 @@
 
 **A Claude skill that interviews a founder of any kind of company and produces the constitution their AI team needs to run itself.**
 
+> 🟢 **Up to date for Paperclip release `v2026.427.0`** — the generated `AGENTS.md`, `HEARTBEAT.md`, and `CEO_BOOTSTRAP.md` files now include the full Paperclip operational substrate verbatim (8-step heartbeat checklist, delegation API patterns, sub-issue ordering, issue-subtree controls, security agent role, environment selection). They are NOT generic markdown — they are drop-in instruction files for a Paperclip-hosted CEO.
+
 Paperclip Vision runs a structured strategic interview, then writes the machine-readable documents that let an AI-run company on [Paperclip](https://usepaperclip.com) (or any agent platform) operate autonomously — without the founder in the loop for day-to-day decisions.
 
-> **Read this README fully before invoking the skill.** The skill itself prompts for confirmation that you've read it. The philosophy, extensibility notes, and "does NOT do" boundaries below aren't repeated inside SKILL.md — they live here.
+> **Read this README fully before invoking the skill.** The philosophy, extensibility notes, and "does NOT do" boundaries below aren't repeated inside SKILL.md — they live here.
 
 ---
 
@@ -161,19 +163,20 @@ Revisit these as the company matures. Early on you may want more oversight; once
 
 ## What's New In This Fork
 
-This fork extends the original `aronprins/paperclip-vision` with:
+This fork extends the original `aronprins/paperclip-vision` and tracks the latest Paperclip release (`v2026.427.0`):
 
+- **Paperclip operational substrate, embedded verbatim** — generated `AGENTS.md` and `HEARTBEAT.md` now include the full 8-step heartbeat checklist, delegation API patterns, sub-issue ordering rules, issue-subtree controls, security agent role, and environment selection — not summarised, verbatim
+- **Paperclip-native hooks preserved** — `paperclip-create-agent`, `para-memory-files`, checkout flow, `X-Paperclip-Run-Id`, and `PAPERCLIP_TASK_ID` references survive into the generated CEO instruction files
 - **Industry-agnostic interview** — adapts to real estate, agencies, SaaS, services, e-commerce, consulting, and more
 - **Conversation-context pre-fill** — skips questions the conversation already answered
 - **Self-contained CEO_BOOTSTRAP** — embeds all operational context as appendices so VPS-hosted CEOs work without local-file access
 - **Paperclip-native file structure** — per-agent `instructions/` layout, VISION.md propagation pattern on hire
 - **Optional AGENTS.md / HEARTBEAT.md / SOUL.md** generation for the CEO's instructions directory
 - **Pipeline-shaped org charts** — not default Marketing/Sales/SEO for every company
-- **Red-line stress test** — scripted hypotheticals to surface implicit red lines
-- **Industry-specific risk prompts** — tailored compliance/risk questions by business type
-- **Confidence markers** — pre-filled sections visibly flagged for verification
-- **Internal consistency auto-check** — automated pre-output consistency pass
-- **Mandatory polish round** — skill self-audits + founder re-reads + CEO polishes on first heartbeat
+
+### Tracking upstream releases
+
+When Paperclip ships a new release, this fork's `SKILL.md` gets updated to match the latest operational conventions and the version banner at the top of this README is bumped. Current target: **`v2026.427.0`**.
 
 ---
 
